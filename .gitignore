@@ -32,7 +32,6 @@ dist/
 build/
 .next/
 out/
-/output/playwright/
 test-results/
 playwright-report/
 
@@ -116,3 +115,8 @@ temp/
 # Backup files
 *.bak
 *.backup
+
+# Exported room archives: these contain personal persona + diary data and must
+# never be committed. Covers the "<name>_槽位N_备份_<date>.json" export naming.
+*_槽位*_备份_*.json
+*_slot*_backup_*.json

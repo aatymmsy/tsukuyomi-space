@@ -1,7 +1,7 @@
 const { spawn } = require('node:child_process');
 
 const isWindows = process.platform === 'win32';
-const npmCommand = 'npm';
+const npmCommand = 'pnpm';
 
 const processes = [
     {
@@ -59,6 +59,8 @@ function stopAll(exitCode = 0) {
 
 for (const item of processes) {
     const child = spawn(item.command, item.args, {
+        // Inherit the ambient environment: the previous hardcoded PATH entry
+        // leaked a local username and is not needed (npm/node are already there).
         env: {
             ...process.env,
             FORCE_COLOR: process.env.FORCE_COLOR || '1'
