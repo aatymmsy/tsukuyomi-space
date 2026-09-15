@@ -2,13 +2,12 @@
  * Confirms the LLM model picker actually offers the DeepSeek V4.1 Flash ids,
  * which is what the user could not find before.
  */
-const { chromium } = require('@playwright/test');
+const { launchChromium } = require('./helpers/browser.cjs');
 
-const EXECUTABLE = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const BASE = process.env.REPRO_BASE || 'http://localhost:5199';
 
 (async () => {
-    const browser = await chromium.launch({ executablePath: EXECUTABLE });
+    const { browser } = await launchChromium();
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));

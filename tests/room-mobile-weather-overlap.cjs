@@ -7,9 +7,8 @@
  *   npx vite --config vite.frontend.config.js --port 5199 --strictPort
  *   node tests/room-mobile-weather-overlap.cjs
  */
-const { chromium } = require('@playwright/test');
+const { launchChromium } = require('./helpers/browser.cjs');
 
-const EXECUTABLE = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const BASE = process.env.REPRO_BASE || 'http://localhost:5199';
 
 const PHONES = [
@@ -26,7 +25,7 @@ function overlaps(a, b) {
 }
 
 (async () => {
-    const browser = await chromium.launch({ executablePath: EXECUTABLE });
+    const { browser } = await launchChromium();
     let failures = 0;
 
     for (const phone of PHONES) {

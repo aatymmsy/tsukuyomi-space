@@ -2,9 +2,8 @@
  * Measures the resized chat panel against the Live2D stage, so the "bigger but
  * still leaves room for the model" requirement is verified rather than assumed.
  */
-const { chromium } = require('@playwright/test');
+const { launchChromium } = require('./helpers/browser.cjs');
 
-const EXECUTABLE = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const BASE = process.env.REPRO_BASE || 'http://localhost:5199';
 
 const VIEWPORTS = [
@@ -16,7 +15,7 @@ const VIEWPORTS = [
 ];
 
 (async () => {
-    const browser = await chromium.launch({ executablePath: EXECUTABLE });
+    const { browser } = await launchChromium();
     let failures = 0;
 
     for (const vp of VIEWPORTS) {

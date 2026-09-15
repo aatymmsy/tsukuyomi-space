@@ -2,11 +2,10 @@
  * Verifies the in-room persona picker against the real archive: all persona
  * types are offered and choosing one switches what the room uses.
  */
-const { chromium } = require('@playwright/test');
+const { launchChromium } = require('./helpers/browser.cjs');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const EXECUTABLE = process.env.CHROME_PATH || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const BASE = process.env.REPRO_BASE || 'http://localhost:5199';
 // Optional: point at a real exported archive to run this against live data.
 // Kept out of the source so no personal paths or file names are committed.
@@ -19,7 +18,7 @@ const ARCHIVE = process.env.ROOM_ARCHIVE_PATH || '';
     }
     const archiveText = fs.readFileSync(ARCHIVE, 'utf8');
 
-    const browser = await chromium.launch({ executablePath: EXECUTABLE });
+    const { browser } = await launchChromium();
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));

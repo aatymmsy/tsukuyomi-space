@@ -5,9 +5,8 @@
  *   - tapping it calls the opener without the user typing anything
  *   - the input row still lays out correctly with and without it
  */
-const { chromium } = require('@playwright/test');
+const { launchChromium } = require('./helpers/browser.cjs');
 
-const EXECUTABLE = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const BASE = process.env.REPRO_BASE || 'http://localhost:5199';
 
 const VIEWPORTS = [
@@ -17,7 +16,7 @@ const VIEWPORTS = [
 ];
 
 (async () => {
-    const browser = await chromium.launch({ executablePath: EXECUTABLE });
+    const { browser } = await launchChromium();
     let failures = 0;
 
     for (const vp of VIEWPORTS) {

@@ -3,9 +3,8 @@
  *   a) the end-chat dialog is centred, fully on-screen and every button is hittable
  *   b) every dock button is visible and tappable
  */
-const { chromium } = require('@playwright/test');
+const { launchChromium } = require('./helpers/browser.cjs');
 
-const EXECUTABLE = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const BASE = process.env.REPRO_BASE || 'http://localhost:5199';
 
 const PHONES = [
@@ -15,7 +14,7 @@ const PHONES = [
 ];
 
 (async () => {
-    const browser = await chromium.launch({ executablePath: EXECUTABLE });
+    const { browser } = await launchChromium();
     let failures = 0;
 
     for (const phone of PHONES) {
