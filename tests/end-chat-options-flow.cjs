@@ -194,13 +194,24 @@ check('every dock button renders on phones, not just the last one', () => {
 
 console.log('\n=== panel sizing ===');
 
-check('chat panel is one third of the page', () => {
-    const block = roomCss.slice(roomCss.indexOf('.room-chat-panel {'), roomCss.indexOf('.room-chat-panel {') + 220);
-    assert.match(block, /width: min\(33\.333vw/);
+check('chat panel is wider than a third of the page', () => {
+    const block = roomCss.slice(roomCss.indexOf('.room-chat-panel {'), roomCss.indexOf('.room-chat-panel {') + 400);
+    // Panel was widened from 33.333vw to 36vw for readability; assert the
+    // intent (at least a third, still bounded) rather than one exact number.
+    const width = block.match(/width:\s*min\((\d+(?:\.\d+)?)vw/);
+    assert.ok(width, 'chat panel must declare a vw-based width');
+    const vw = Number(width[1]);
+    assert.ok(vw >= 33.333, `chat panel must be at least a third of the page, got ${vw}vw`);
+    assert.ok(vw <= 50, `chat panel must leave room for the model, got ${vw}vw`);
+    assert.match(block, /max-width: calc\(100vw - 2rem\)/);
 });
 check('diary panel matches the chat panel', () => {
-    const block = roomCss.slice(roomCss.indexOf('.room-diary-panel {'), roomCss.indexOf('.room-diary-panel {') + 260);
-    assert.match(block, /width: min\(33\.333vw/);
+    const chatBlock = roomCss.slice(roomCss.indexOf('.room-chat-panel {'), roomCss.indexOf('.room-chat-panel {') + 400);
+    const diaryBlock = roomCss.slice(roomCss.indexOf('.room-diary-panel {'), roomCss.indexOf('.room-diary-panel {') + 400);
+    const chatWidth = chatBlock.match(/width:\s*min\((\d+(?:\.\d+)?)vw/);
+    const diaryWidth = diaryBlock.match(/width:\s*min\((\d+(?:\.\d+)?)vw/);
+    assert.ok(chatWidth && diaryWidth, 'both panels must declare a vw width');
+    assert.equal(diaryWidth[1], chatWidth[1], 'diary panel must match the chat panel width');
 });
 check('diary body uses the extra space with a two-column layout', () => {
     const block = roomCss.slice(roomCss.indexOf('.diary-body {'), roomCss.indexOf('.diary-body {') + 400);
